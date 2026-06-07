@@ -1,0 +1,23 @@
+# One-command setup for graders:
+#   bash scripts/setup_env.sh
+# or:
+#   conda env create -f environment-minimal.yml && conda activate fdfk
+name: fdfk
+channels:
+  - conda-forge
+dependencies:
+  # --- conda-forge ---
+  - python>=3.10,<3.13
+  - numpy>=1.23
+  - scipy>=1.9
+  - numba>=0.57
+  - pyyaml>=6.0
+  - matplotlib>=3.5
+  - pytest>=7.0
+  # --- pip only (no "seispy" on PyPI; conda-forge seispy is capped at 1.2.x) ---
+  - pip
+  - pip:
+    - python-seispy>=1.2.3
+  # Optional — uncomment if needed:
+  # - h5py>=3.8
+  # - jupyter  # notebooks

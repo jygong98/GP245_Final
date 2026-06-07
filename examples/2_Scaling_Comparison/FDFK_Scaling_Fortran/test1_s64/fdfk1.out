@@ -1,0 +1,65 @@
+
+This program simulates teleseismic wavefields with a hybrid method that 
+couples the Finite Difference Method (FD) with the Frequency-Wavenumber (FK) Method
+Author: Youshan Liu [at] Institue of Geology and Geophysics, Chinese Academy of Sciences
+All Copyright Reserved (C) [v1.0]
+
+Start time: 2026 /  6 /  7 ;  6 :  3 :  0 : 171
+ 
+INFO: it requires 10.7342 GBs to store the background wavefields for Hybrid method !
+ 
+R0 =   1.0000E-03
+ 
+computing background wavefield using FK method... 
+ 
+
+Entering Frequency-Wavenumber (FK) method
+Author: Youshan Liu [at] Institue of Geology and Geophysics, Chinese Academy of Sciences
+All Copyright Reserved (C) [v0.8]
+
+FK3D: ray parameter    8.575032E-02 s/km [9.5350 s/deg]
+
+
+Incident angle of S-wave:  17.2078
+finish FK ...
+ 
+ 
+computing wavefield with FD-FK hybrid method ... 
+ 
+nrcv = 8001  ; nsamp =  4001
+ 
+f0 = 1.0000 ; dx = 200.0000 ; dz = 200.0000 ; dt = 0.010000
+ 
+nx = 8001 ; nz = 2001 ; nt = 4001
+ 
+ 
+t =     0.00000 s  5.5473E-12  7.0453E-12  ;    7.013 min. remained
+t =     0.50000 s  8.7025E-09  2.7895E-09  ;  333.818 min. remained
+t =     1.00000 s  4.7188E-05  1.4905E-05  ;  323.853 min. remained
+t =     1.50000 s  4.2281E-04  1.3311E-04  ;  315.058 min. remained
+t =     2.00000 s  9.4812E-04  2.9822E-04  ;  305.997 min. remained
+t =     2.50000 s  9.5393E-04  2.9841E-04  ;  315.403 min. remained
+t =     3.00000 s  9.5481E-04  2.9808E-04  ;  303.301 min. remained
+t =     3.50000 s  9.5447E-04  2.9803E-04  ;  303.781 min. remained
+t =     4.00000 s  9.5386E-04  2.9832E-04  ;  312.545 min. remained
+t =     4.50000 s  9.5385E-04  2.9824E-04  ;  303.979 min. remained
+t =     5.00000 s  9.5387E-04  2.9776E-04  ;  295.565 min. remained
+t =     5.50000 s  9.5389E-04  2.9811E-04  ;  293.797 min. remained
+t =     6.00000 s  9.5382E-04  2.9822E-04  ;  271.678 min. remained
+t =     6.50000 s  9.5378E-04  2.9787E-04  ;  285.694 min. remained
+t =     7.00000 s  9.5389E-04  2.9792E-04  ;  246.794 min. remained
+t =     7.50000 s  9.5390E-04  2.9814E-04  ;  243.479 min. remained
+t =     8.00000 s  9.5384E-04  2.9784E-04  ;  240.003 min. remained
+t =     8.50000 s  9.5396E-04  2.9782E-04  ;  234.662 min. remained
+t =     9.00000 s  9.5396E-04  2.9806E-04  ;  238.556 min. remained
+t =     9.50000 s  9.5387E-04  2.9769E-04  ;  239.751 min. remained
+t =    10.00000 s  9.5397E-04  2.9781E-04  ;  240.813 min. remained
+t =    10.50000 s  9.5391E-04  2.9796E-04  ;  234.604 min. remained
+t =    11.00000 s  9.5388E-04  2.9741E-04  ;  232.309 min. remained
+t =    11.50000 s  9.5388E-04  2.9786E-04  ;  227.423 min. remained
+t =    12.00000 s  9.5395E-04  2.9777E-04  ;  222.382 min. remained
+t =    12.50000 s  9.5390E-04  2.9750E-04  ;  214.540 min. remained
+t =    13.00000 s  9.5405E-04  2.9784E-04  ;  213.283 min. remained
+t =    13.50000 s  9.5393E-04  2.9738E-04  ;  207.032 min. remained
+t =    14.00000 s  9.5402E-04  2.9772E-04  ;  213.304 min. remained
+t =    14.50000 s  9.5395E-04  2.9761E-04  ;  197.251 min. remained

@@ -1,0 +1,119 @@
+
+This program simulates teleseismic wavefields with a hybrid method that 
+couples the Finite Difference Method (FD) with the Frequency-Wavenumber (FK) Method
+Author: Youshan Liu [at] Institue of Geology and Geophysics, Chinese Academy of Sciences
+All Copyright Reserved (C) [v1.0]
+
+Start time: 2026 /  6 /  7 ;  5 : 54 : 16 : 906
+ 
+INFO: it requires  2.6856 GBs to store the background wavefields for Hybrid method !
+ 
+R0 =   1.0000E-03
+ 
+computing background wavefield using FK method... 
+ 
+
+Entering Frequency-Wavenumber (FK) method
+Author: Youshan Liu [at] Institue of Geology and Geophysics, Chinese Academy of Sciences
+All Copyright Reserved (C) [v0.8]
+
+FK3D: ray parameter    8.575032E-02 s/km [9.5350 s/deg]
+
+
+Incident angle of S-wave:  17.2078
+finish FK ...
+ 
+ 
+computing wavefield with FD-FK hybrid method ... 
+ 
+nrcv = 2001  ; nsamp =  4001
+ 
+f0 = 1.0000 ; dx = 200.0000 ; dz = 200.0000 ; dt = 0.010000
+ 
+nx = 2001 ; nz = 501 ; nt = 4001
+ 
+ 
+t =     0.00000 s  2.1244E-10  8.3260E-11  ;    0.667 min. remained
+t =     0.50000 s  2.4985E-05  7.8681E-06  ;   29.208 min. remained
+t =     1.00000 s  4.2264E-04  1.3276E-04  ;   28.554 min. remained
+t =     1.50000 s  9.4724E-04  2.9766E-04  ;   28.154 min. remained
+t =     2.00000 s  9.5152E-04  2.9737E-04  ;   27.674 min. remained
+t =     2.50000 s  9.5260E-04  2.9758E-04  ;   27.230 min. remained
+t =     3.00000 s  9.5254E-04  2.9740E-04  ;   27.001 min. remained
+t =     3.50000 s  9.5198E-04  2.9747E-04  ;   26.425 min. remained
+t =     4.00000 s  9.5193E-04  2.9744E-04  ;   26.147 min. remained
+t =     4.50000 s  9.5207E-04  2.9731E-04  ;   25.580 min. remained
+t =     5.00000 s  9.5191E-04  2.9748E-04  ;   25.524 min. remained
+t =     5.50000 s  9.5201E-04  2.9708E-04  ;   24.953 min. remained
+t =     6.00000 s  9.5205E-04  2.9748E-04  ;   24.624 min. remained
+t =     6.50000 s  9.5209E-04  2.9707E-04  ;   24.229 min. remained
+t =     7.00000 s  9.5213E-04  2.9741E-04  ;   24.076 min. remained
+t =     7.50000 s  9.5208E-04  2.9715E-04  ;   23.582 min. remained
+t =     8.00000 s  9.5214E-04  2.9722E-04  ;   23.224 min. remained
+t =     8.50000 s  9.5212E-04  2.9731E-04  ;   23.501 min. remained
+t =     9.00000 s  9.5219E-04  2.9686E-04  ;   23.011 min. remained
+t =     9.50000 s  9.5217E-04  2.9732E-04  ;   22.093 min. remained
+t =    10.00000 s  9.5223E-04  2.9703E-04  ;   21.780 min. remained
+t =    10.50000 s  9.5218E-04  2.9714E-04  ;   21.495 min. remained
+t =    11.00000 s  9.5220E-04  2.9720E-04  ;   21.174 min. remained
+t =    11.50000 s  9.5230E-04  2.9678E-04  ;   20.593 min. remained
+t =    12.00000 s  9.5227E-04  2.9720E-04  ;   20.325 min. remained
+t =    12.50000 s  9.5232E-04  2.9698E-04  ;   19.893 min. remained
+t =    13.00000 s  9.5230E-04  2.9689E-04  ;   19.668 min. remained
+t =    13.50000 s  9.5230E-04  2.9715E-04  ;   19.505 min. remained
+t =    14.00000 s  9.5230E-04  2.9686E-04  ;   19.324 min. remained
+t =    14.50000 s  9.5240E-04  2.9696E-04  ;   18.688 min. remained
+t =    15.00000 s  9.5233E-04  2.9706E-04  ;   18.430 min. remained
+t =    15.50000 s  9.5242E-04  2.9675E-04  ;   17.883 min. remained
+t =    16.00000 s  9.5246E-04  2.9695E-04  ;   17.625 min. remained
+t =    16.50000 s  9.5234E-04  2.9698E-04  ;   17.146 min. remained
+t =    17.00000 s  9.5251E-04  2.9667E-04  ;   16.841 min. remained
+t =    17.50000 s  9.5248E-04  2.9690E-04  ;   16.407 min. remained
+t =    18.00000 s  9.5243E-04  2.9692E-04  ;   16.064 min. remained
+t =    18.50000 s  9.5257E-04  2.9665E-04  ;   15.679 min. remained
+t =    19.00000 s  9.5254E-04  2.9682E-04  ;   15.369 min. remained
+t =    19.50000 s  9.5245E-04  2.9689E-04  ;   14.977 min. remained
+t =    20.00000 s  9.5260E-04  2.9665E-04  ;   14.614 min. remained
+t =    20.50000 s  9.5262E-04  2.9669E-04  ;   14.155 min. remained
+t =    21.00000 s  9.5253E-04  2.9686E-04  ;   13.839 min. remained
+t =    21.50000 s  9.5256E-04  2.9667E-04  ;   13.449 min. remained
+t =    22.00000 s  9.5265E-04  2.9647E-04  ;   13.125 min. remained
+t =    22.50000 s  9.5264E-04  2.9680E-04  ;   12.672 min. remained
+t =    23.00000 s  9.5269E-04  2.9668E-04  ;   12.334 min. remained
+t =    23.50000 s  9.5269E-04  2.9646E-04  ;   11.950 min. remained
+t =    24.00000 s  9.5262E-04  2.9664E-04  ;   11.615 min. remained
+t =    24.50000 s  9.5265E-04  2.9674E-04  ;   11.205 min. remained
+t =    25.00000 s  9.5275E-04  2.9657E-04  ;   10.873 min. remained
+t =    25.50000 s  9.5279E-04  2.9632E-04  ;   10.443 min. remained
+t =    26.00000 s  9.5277E-04  2.9666E-04  ;   10.186 min. remained
+t =    26.50000 s  9.5282E-04  2.9663E-04  ;    9.805 min. remained
+t =    27.00000 s  9.5285E-04  2.9647E-04  ;    9.453 min. remained
+t =    27.50000 s  9.5284E-04  2.9636E-04  ;    8.985 min. remained
+t =    28.00000 s  9.5280E-04  2.9662E-04  ;    9.606 min. remained
+t =    28.50000 s  9.5287E-04  2.9655E-04  ;    8.331 min. remained
+t =    29.00000 s  1.8033E-03  6.4946E-04  ;    7.992 min. remained
+t =    29.50000 s  1.8008E-03  6.4024E-04  ;    7.611 min. remained
+t =    30.00000 s  1.7946E-03  6.3860E-04  ;    7.244 min. remained
+t =    30.50000 s  1.7935E-03  6.3858E-04  ;    6.846 min. remained
+t =    31.00000 s  1.8215E-03  6.4502E-04  ;    6.511 min. remained
+t =    31.50000 s  1.8403E-03  6.4943E-04  ;    6.138 min. remained
+t =    32.00000 s  1.8446E-03  6.5050E-04  ;    5.770 min. remained
+t =    32.50000 s  1.8473E-03  6.5061E-04  ;    5.378 min. remained
+t =    33.00000 s  1.8427E-03  6.4926E-04  ;    5.020 min. remained
+t =    33.50000 s  1.8449E-03  6.4963E-04  ;    4.634 min. remained
+t =    34.00000 s  1.8413E-03  6.4877E-04  ;    4.317 min. remained
+t =    34.50000 s  1.8450E-03  6.5000E-04  ;    3.937 min. remained
+t =    35.00000 s  1.8426E-03  6.4892E-04  ;    3.596 min. remained
+t =    35.50000 s  1.8449E-03  6.5029E-04  ;    3.222 min. remained
+t =    36.00000 s  1.8439E-03  6.4972E-04  ;    2.878 min. remained
+t =    36.50000 s  1.8443E-03  6.5042E-04  ;    2.513 min. remained
+t =    37.00000 s  1.8450E-03  6.5045E-04  ;    2.195 min. remained
+t =    37.50000 s  1.8430E-03  6.5032E-04  ;    2.159 min. remained
+t =    38.00000 s  1.8456E-03  6.5102E-04  ;    1.766 min. remained
+t =    38.50000 s  1.8427E-03  6.4989E-04  ;    1.317 min. remained
+t =    39.00000 s  1.8454E-03  6.5133E-04  ;    0.867 min. remained
+t =    39.50000 s  1.8448E-03  6.5090E-04  ;    0.433 min. remained
+t =    40.00000 s  1.8442E-03  6.5126E-04  ;    0.000 min. remained
+Start   time: 2026 /  6 /  7 ;  5 : 54 : 16 : 906
+End     time: 2026 /  6 /  7 ;  6 : 23 : 59 : 230
+Elapsed time:    0 /  0 /  0 ;  1 : ** : 43 : ***

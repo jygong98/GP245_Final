@@ -1,0 +1,12 @@
+# Core runtime (also available via conda-forge; see environment-minimal.yml)
+numpy>=1.23
+scipy>=1.9
+matplotlib>=3.5
+numba>=0.57
+PyYAML>=6.0
+
+# Testing
+pytest>=7.0
+
+# Receiver functions — PyPI name is python-seispy; import name is seispy
+python-seispy>=1.2.3
