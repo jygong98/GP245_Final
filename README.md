@@ -11,18 +11,9 @@ This project reproduces the **FDFK2D hybrid method** (finite-difference FD + wav
 | `rf/` | P/S receiver functions from FK or hybrid seismograms |
 | `plots/` | Wavefield snapshots, animations, and other visualization tools |
 
-The original FDFK2D FK core is a closed-source library; this repository reimplements it from scratch using paper Appendix A and validates against Fortran reference output and `benchmark/` data.
-
 ---
 
 ## Installation
-
-**Recommended (course environment):**
-
-```bash
-conda activate GP245_Final
-pip install -r requirements.txt   # if dependencies are not yet installed
-```
 
 **One-command standalone environment:**
 
@@ -42,18 +33,15 @@ Top-level example subdirectories (each with `run_workflow.py`, a Jupyter workflo
 
 | Directory | Contents |
 |-----------|----------|
-| `0_config_examples/` | YAML configuration templates (FK / hybrid / Antarctic ice cover, etc.) |
-| `_common/` | Shared example workflow script `rf_example_workflow.py` |
 | `1_Crust_Mantle_P/` | Single-layer crust over mantle, P-wave incidence (`benchmark/test1_P_out`) |
 | `1_Crust_Mantle_LAB_S/` | Crust + mantle, S-wave incidence (`benchmark/test1_S_out`) |
-| `1_Sed_Crust_Mantle_P/` | Sediment + crust + ice cover, P-wave incidence (Antarctic `AT_sed_ice` family) |
 | `1_Antarctica_RF/` | Antarctic `AT_crust_ice` profile (ice + crust), full P-wave + RF workflow |
 | `2_Scaling_Comparison/` | Python hybrid vs Fortran FDFK2D thread/spatial scaling comparison |
 
 Typical usage (crust–mantle P-wave example):
 
 ```bash
-conda activate GP245_Final
+conda activate fdfk
 cd examples/1_Crust_Mantle_P
 python run_workflow.py
 ```
@@ -62,7 +50,7 @@ python run_workflow.py
 
 ## `notebooks/` directory
 
-Top-level Jupyter notebooks (numbered; excludes `old_notebook/`):
+Jupyter notebooks for scaling analyses and precision benchmark examples.
 
 | Notebook | Purpose |
 |----------|---------|
@@ -89,12 +77,14 @@ res = compute_fk_seismograms(model, source, rx=[0, 25000, 50000], dt=0.01, nt=45
 # res.t, res.ux, res.uz
 ```
 
-For hybrid forward modeling see `hybrid.engine.compute_hybrid_seismograms`; tests: `python -m pytest tests/ -q`.
+For hybrid forward modeling see `hybrid.engine.compute_hybrid_seismograms`; 
+
+---
+
+## Warning: This code could not output correct answer yet.
 
 ---
 
 ## References
 
 Liu, Y., et al. (2025). FDFK2D: Efficient Two-Dimensional Teleseismic Wavefield Modeling for Receiver Function Analysis Using a Hybrid Method, *Seismol. Res. Lett.* 96, 1163–1180. [doi:10.1785/0220240231](https://doi.org/10.1785/0220240231)
-
-Upstream code: <https://github.com/YoushanLiu/FDFK2D>
