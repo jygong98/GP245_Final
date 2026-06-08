@@ -12,6 +12,7 @@ coupling-zone injection (``hybrid.injection``).
 
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass
 from typing import Sequence
 
@@ -199,6 +200,36 @@ def _inject_add_reg(ux, uz, bwf_ux_l, bwf_uz_l, bwf_ux_r, bwf_uz_r,
                    nbd, norder, npml, nx, nz, True)
 
 
+def _resolve_progress_interval(
+    verbose: bool,
+    progress_interval: int | None,
+    nt: int,
+) -> int:
+    """Return the time-step interval for progress prints (0 = disabled)."""
+    if not verbose:
+        return 0
+    if progress_interval is not None:
+        return max(0, int(progress_interval))
+    # ~10 updates over the record when verbose and interval not specified.
+    return max(1, nt // 10)
+
+
+def _print_timeloop_progress(
+    it_done: int,
+    nt: int,
+    dt: float,
+    t_elapsed: float,
+) -> None:
+    """Print FD time-stepping progress (step count, simulated time, wall time)."""
+    pct = 100.0 * it_done / nt
+    t_sim = it_done * dt
+    print(
+        f"[Hybrid]   step {it_done}/{nt} ({pct:5.1f}%), "
+        f"t={t_sim:.2f}s, elapsed {t_elapsed:.1f}s",
+        flush=True,
+    )
+
+
 @njit(cache=True)
 def _store_wavefield_snapshot(ux, uz, snap_ux, snap_uz, snap_idx, nz, nx, npml):
     """Copy regular-domain displacement into preallocated snapshot buffers."""
@@ -223,6 +254,8 @@ def _run_timeloop_numba(
     rcv_ix, rcv_iz,
     seis_ux, seis_uz,
     nt,
+    it_start,
+    nt_run,
     snapshot_interval,
     snap_ux, snap_uz,
 ):
@@ -241,7 +274,7 @@ def _run_timeloop_numba(
     nt_bwf = bwf_ux_l.shape[2]
     nrcv = rcv_ix.shape[0]
 
-    for it in range(nt):
+    for it in range(it_start, it_start + nt_run):
         # --- Select time-level buffers via cyclic rotation ---
         r = it % 3
         if r == 0:
@@ -376,12 +409,14 @@ def _run_timeloop_numba_legacy(
     rcv_ix, rcv_iz,
     seis_ux, seis_uz,
     nt,
+    it_start,
+    nt_run,
 ):
     """Legacy non-conservative fused loop (``conservative=False`` only)."""
     nt_bwf = bwf_ux_l.shape[2]
     nrcv = rcv_ix.shape[0]
 
-    for it in range(nt):
+    for it in range(it_start, it_start + nt_run):
         r = it % 3
         if r == 0:
             ux_old = ux_buf0; uz_old = uz_buf0
@@ -514,6 +549,8 @@ def _run_timeloop_numba_cpml(
     rcv_ix, rcv_iz,
     seis_ux, seis_uz,
     nt,
+    it_start,
+    nt_run,
     snapshot_interval,
     snap_ux, snap_uz,
 ):
@@ -521,7 +558,7 @@ def _run_timeloop_numba_cpml(
     nt_bwf = bwf_ux_l.shape[2]
     nrcv = rcv_ix.shape[0]
 
-    for it in range(nt):
+    for it in range(it_start, it_start + nt_run):
         r = it % 3
         if r == 0:
             ux_old = ux_buf0; uz_old = uz_buf0
@@ -667,87 +704,105 @@ def _init_coupling_nodes(solver, bwf, config):
 def _dispatch_timeloop(solver, config, bwf, rcv_ix, rcv_iz,
                        seis_ux, seis_uz, nt, *,
                        snapshot_interval: int = 0,
-                       snap_ux=None, snap_uz=None):
-    """Choose fused Numba time loop (conservative or legacy)."""
+                       snap_ux=None, snap_uz=None,
+                       progress_interval: int = 0):
+    """Choose fused Numba time loop (conservative or legacy).
+
+    When ``progress_interval > 0``, the loop is split into chunks so Python
+    can print step progress between Numba calls.
+    """
     snap_iv = snapshot_interval
     if snap_ux is None:
         snap_ux = np.empty((1, 1, 1), dtype=np.float64)
     if snap_uz is None:
         snap_uz = np.empty((1, 1, 1), dtype=np.float64)
 
-    if not solver.conservative:
-        if solver.use_cpml:
-            raise NotImplementedError(
-                "conservative=False with C-PML is not supported in the fused loop"
+    def _run_chunk(it_start: int, nt_run: int) -> None:
+        if not solver.conservative:
+            if solver.use_cpml:
+                raise NotImplementedError(
+                    "conservative=False with C-PML is not supported in the fused loop"
+                )
+            _run_timeloop_numba_legacy(
+                solver.ux_old, solver.uz_old,
+                solver.ux_cur, solver.uz_cur,
+                solver.ux_new, solver.uz_new,
+                solver.lam2mu_over_rho, solver.mu_over_rho, solver.lam_mu_over_rho,
+                solver.d2_coef_x, solver.d2_coef_z,
+                solver.lam, solver.mu,
+                solver.coef, solver.norder,
+                solver.dt, solver.dx, solver.dz,
+                config.nx, config.nz, config.npml,
+                solver.nz_tot, solver.nx_tot, solver.iz_start,
+                solver.dx_damp, solver.dz_damp,
+                bwf.ux_left, bwf.uz_left,
+                bwf.ux_right, bwf.uz_right,
+                bwf.ux_bottom, bwf.uz_bottom,
+                config.nbd,
+                rcv_ix, rcv_iz,
+                seis_ux, seis_uz,
+                nt, it_start, nt_run,
             )
-        _run_timeloop_numba_legacy(
-            solver.ux_old, solver.uz_old,
-            solver.ux_cur, solver.uz_cur,
-            solver.ux_new, solver.uz_new,
-            solver.lam2mu_over_rho, solver.mu_over_rho, solver.lam_mu_over_rho,
-            solver.d2_coef_x, solver.d2_coef_z,
-            solver.lam, solver.mu,
-            solver.coef, solver.norder,
-            solver.dt, solver.dx, solver.dz,
-            config.nx, config.nz, config.npml,
-            solver.nz_tot, solver.nx_tot, solver.iz_start,
-            solver.dx_damp, solver.dz_damp,
-            bwf.ux_left, bwf.uz_left,
-            bwf.ux_right, bwf.uz_right,
-            bwf.ux_bottom, bwf.uz_bottom,
-            config.nbd,
-            rcv_ix, rcv_iz,
-            seis_ux, seis_uz,
-            nt,
-        )
+            return
+
+        if solver.use_cpml:
+            _run_timeloop_numba_cpml(
+                solver.ux_old, solver.uz_old,
+                solver.ux_cur, solver.uz_cur,
+                solver.ux_new, solver.uz_new,
+                solver.lam2mu, solver.mu_raw, solver.lam_raw, solver.rho,
+                solver.coef0, solver.coef,
+                solver.norder,
+                solver.lam, solver.mu,
+                solver.dt, solver.dx, solver.dz,
+                config.nx, config.nz, config.npml,
+                solver.nz_tot, solver.nx_tot, solver.iz_start,
+                solver.dx_deff, solver.dz_deff,
+                solver.dx_a, solver.dz_a, solver.dx_b, solver.dz_b,
+                solver.psi_ux, solver.psi_uz,
+                bwf.ux_left, bwf.uz_left,
+                bwf.ux_right, bwf.uz_right,
+                bwf.ux_bottom, bwf.uz_bottom,
+                config.nbd,
+                rcv_ix, rcv_iz,
+                seis_ux, seis_uz,
+                nt, it_start, nt_run,
+                snap_iv, snap_ux, snap_uz,
+            )
+        else:
+            _run_timeloop_numba(
+                solver.ux_old, solver.uz_old,
+                solver.ux_cur, solver.uz_cur,
+                solver.ux_new, solver.uz_new,
+                solver.lam2mu, solver.mu_raw, solver.lam_raw, solver.rho,
+                solver.coef0, solver.coef,
+                solver.norder,
+                solver.lam, solver.mu,
+                solver.dt, solver.dx, solver.dz,
+                config.nx, config.nz, config.npml,
+                solver.nz_tot, solver.nx_tot, solver.iz_start,
+                solver.dx_damp, solver.dz_damp,
+                bwf.ux_left, bwf.uz_left,
+                bwf.ux_right, bwf.uz_right,
+                bwf.ux_bottom, bwf.uz_bottom,
+                config.nbd,
+                rcv_ix, rcv_iz,
+                seis_ux, seis_uz,
+                nt, it_start, nt_run,
+                snap_iv, snap_ux, snap_uz,
+            )
+
+    if progress_interval <= 0:
+        _run_chunk(0, nt)
         return
 
-    if solver.use_cpml:
-        _run_timeloop_numba_cpml(
-            solver.ux_old, solver.uz_old,
-            solver.ux_cur, solver.uz_cur,
-            solver.ux_new, solver.uz_new,
-            solver.lam2mu, solver.mu_raw, solver.lam_raw, solver.rho,
-            solver.coef0, solver.coef,
-            solver.norder,
-            solver.lam, solver.mu,
-            solver.dt, solver.dx, solver.dz,
-            config.nx, config.nz, config.npml,
-            solver.nz_tot, solver.nx_tot, solver.iz_start,
-            solver.dx_deff, solver.dz_deff,
-            solver.dx_a, solver.dz_a, solver.dx_b, solver.dz_b,
-            solver.psi_ux, solver.psi_uz,
-            bwf.ux_left, bwf.uz_left,
-            bwf.ux_right, bwf.uz_right,
-            bwf.ux_bottom, bwf.uz_bottom,
-            config.nbd,
-            rcv_ix, rcv_iz,
-            seis_ux, seis_uz,
-            nt,
-            snap_iv, snap_ux, snap_uz,
-        )
-    else:
-        _run_timeloop_numba(
-            solver.ux_old, solver.uz_old,
-            solver.ux_cur, solver.uz_cur,
-            solver.ux_new, solver.uz_new,
-            solver.lam2mu, solver.mu_raw, solver.lam_raw, solver.rho,
-            solver.coef0, solver.coef,
-            solver.norder,
-            solver.lam, solver.mu,
-            solver.dt, solver.dx, solver.dz,
-            config.nx, config.nz, config.npml,
-            solver.nz_tot, solver.nx_tot, solver.iz_start,
-            solver.dx_damp, solver.dz_damp,
-            bwf.ux_left, bwf.uz_left,
-            bwf.ux_right, bwf.uz_right,
-            bwf.ux_bottom, bwf.uz_bottom,
-            config.nbd,
-            rcv_ix, rcv_iz,
-            seis_ux, seis_uz,
-            nt,
-            snap_iv, snap_ux, snap_uz,
-        )
+    t_loop = time.perf_counter()
+    it = 0
+    while it < nt:
+        chunk = min(progress_interval, nt - it)
+        _run_chunk(it, chunk)
+        it += chunk
+        _print_timeloop_progress(it, nt, config.dt, time.perf_counter() - t_loop)
 
 
 def compute_hybrid_seismograms(
@@ -768,6 +823,7 @@ def compute_hybrid_seismograms(
     bwf_pad_factor: float = 1.0,
     fortran_seisx_convention: bool = True,
     verbose: bool = True,
+    progress_interval: int | None = None,
     snapshot_interval: int = 0,
 ) -> HybridResult:
     """Run a full hybrid FD-FK simulation and extract seismograms.
@@ -804,7 +860,12 @@ def compute_hybrid_seismograms(
         seismograms so that ``result.ux`` matches the Fortran ``seisx.su``
         output convention.
     verbose : bool
-        Print progress messages.
+        Print progress messages. When ``True``, the FD time loop reports
+        progress periodically unless ``progress_interval=0``.
+    progress_interval : int or None, optional
+        Print FD time-stepping progress every N steps. ``None`` (default)
+        uses about 10 updates over the record when ``verbose=True``.
+        Set to ``0`` to disable in-loop progress while keeping phase banners.
     snapshot_interval : int
         If > 0, store full wavefield snapshots every N steps. Uses the same
         fused Numba time loop as seismogram-only runs (no slow Python path).
@@ -821,6 +882,7 @@ def compute_hybrid_seismograms(
 
     nx, nz = config.nx, config.nz
     nt = config.nt
+    prog_iv = _resolve_progress_interval(verbose, progress_interval, nt)
 
     # --- Build 2D material model ---
     if vp_2d is None:
@@ -854,6 +916,8 @@ def compute_hybrid_seismograms(
     # --- Time-stepping ---
     if verbose:
         print(f"[Hybrid] Time-stepping: {nt} steps, dt={config.dt:.5f}s...")
+        if prog_iv > 0:
+            print(f"[Hybrid] Progress every {prog_iv} steps.", flush=True)
 
     seis_ux = np.zeros((nrcv, nt), dtype=np.float32)
     seis_uz = np.zeros((nrcv, nt), dtype=np.float32)
@@ -882,6 +946,7 @@ def compute_hybrid_seismograms(
 
     if not solver.conservative and snapshot_interval > 0:
         # Legacy non-conservative form: step-by-step Python loop with snapshots.
+        t_loop = time.perf_counter()
         for it in range(nt):
             inject_for_regular_pass(solver, bwf, config, it)
             _fd_update_regular(solver, config)
@@ -902,6 +967,12 @@ def compute_hybrid_seismograms(
                 ux_snap, uz_snap = solver.get_displacement()
                 snapshots_ux.append(ux_snap.copy())
                 snapshots_uz.append(uz_snap.copy())
+            if prog_iv > 0 and (
+                (it + 1) % prog_iv == 0 or it + 1 == nt
+            ):
+                _print_timeloop_progress(
+                    it + 1, nt, config.dt, time.perf_counter() - t_loop,
+                )
     else:
         _dispatch_timeloop(
             solver, config, bwf,
@@ -910,6 +981,7 @@ def compute_hybrid_seismograms(
             snapshot_interval=snapshot_interval,
             snap_ux=snap_ux,
             snap_uz=snap_uz,
+            progress_interval=prog_iv,
         )
 
     if fortran_seisx_convention and phi != 0.0:
@@ -1053,6 +1125,7 @@ class HybridEngine:
         bwf_pad_factor: float = 1.0,
         fortran_seisx_convention: bool = True,
         verbose: bool = True,
+        progress_interval: int | None = None,
     ):
         self.config = config
         self.source = source
@@ -1060,6 +1133,8 @@ class HybridEngine:
         self.phi = phi
         self.freq_damping = freq_damping
         self.fortran_seisx_convention = fortran_seisx_convention
+        self.verbose = verbose
+        self.progress_interval = progress_interval
 
         # Anti-wraparound synthesis length for the boundary wavefield
         nt_syn = synthesis_length(config.nt, bwf_pad_factor)
@@ -1153,12 +1228,25 @@ class HybridEngine:
 
         bwf = self._bwf
         _init_coupling_nodes(solver, bwf, config)
+        prog_iv = _resolve_progress_interval(
+            self.verbose, self.progress_interval, config.nt,
+        )
+        if self.verbose:
+            print(
+                f"[HybridEngine] Time-stepping: {config.nt} steps, "
+                f"dt={config.dt:.5f}s...",
+            )
+            if prog_iv > 0:
+                print(f"[HybridEngine] Progress every {prog_iv} steps.", flush=True)
         _dispatch_timeloop(
             solver, config, bwf,
             rcv_ix, rcv_iz,
             seis_ux, seis_uz,
             config.nt,
+            progress_interval=prog_iv,
         )
+        if self.verbose:
+            print("[HybridEngine] Simulation complete.")
         self._compiled = True
 
         if self.fortran_seisx_convention and self.phi != 0.0:
