@@ -1,0 +1,9 @@
+=== python_t1 (thread) ===
+Host: sh04-12n29.int
+Grid: 1001 x 251, nt=4001, threads=1
+Python: /home/users/jygong/miniconda3/envs/fdfk/bin/python
+Output: /oak/stanford/groups/sklemp/jygong/GP245/FDFK_Python/examples/2_Scaling_Comparison/sherlock/results/python_t1.json
+Started: 2026-06-07T12:15:31-0700
+1911.25889359368
+Finished: 2026-06-07T12:47:28-0700
+Wrote /oak/stanford/groups/sklemp/jygong/GP245/FDFK_Python/examples/2_Scaling_Comparison/sherlock/results/python_t1.json

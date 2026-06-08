@@ -1,0 +1,28 @@
+{
+  "runs": [
+    {
+      "suite": "thread",
+      "label": "python_t32",
+      "threads": 32,
+      "spatial_factor": null,
+      "nx": 1001,
+      "nz": 251,
+      "nt": 4001,
+      "tmax": 40.0,
+      "grid_points": 251251,
+      "time_seconds": 119.0024643400684,
+      "complete": true,
+      "host": "x86_64",
+      "timestamp": "2026-06-07T19:51:33.147341+00:00"
+    }
+  ],
+  "metadata": {
+    "input_dir": "/oak/stanford/groups/sklemp/jygong/GP245/FDFK_Python/benchmark/test1/input",
+    "baseline_grid": [
+      1001,
+      251
+    ],
+    "tmax": 40.0,
+    "updated": "2026-06-07T19:51:33.147476+00:00"
+  }
+}

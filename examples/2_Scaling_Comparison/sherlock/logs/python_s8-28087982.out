@@ -1,0 +1,9 @@
+=== python_s8 (spatial) ===
+Host: sh04-09n31.int
+Grid: 2001 x 1001, nt=4001, threads=8
+Python: /home/users/jygong/miniconda3/envs/fdfk/bin/python
+Output: /oak/stanford/groups/sklemp/jygong/GP245/FDFK_Python/examples/2_Scaling_Comparison/sherlock/results/python_s8.json
+Started: 2026-06-07T11:37:37-0700
+1962.2382767978124
+Finished: 2026-06-07T12:10:33-0700
+Wrote /oak/stanford/groups/sklemp/jygong/GP245/FDFK_Python/examples/2_Scaling_Comparison/sherlock/results/python_s8.json

@@ -1,0 +1,47 @@
+{
+  "runs": [
+    {
+      "suite": "spatial",
+      "label": "python_s4",
+      "threads": 8,
+      "spatial_factor": 4,
+      "nx": 2001,
+      "nz": 501,
+      "nt": 4001,
+      "tmax": 40.0,
+      "grid_points": 1002501,
+      "time_seconds": 1026.925818062853,
+      "complete": true,
+      "host": "x86_64",
+      "timestamp": "2026-06-07T18:54:55.967200+00:00"
+    }
+  ],
+  "metadata": {
+    "input_dir": "/oak/stanford/groups/sklemp/jygong/GP245/FDFK_Python/benchmark/test1/input",
+    "spatial_grids": {
+      "1": [
+        1001,
+        251
+      ],
+      "2": [
+        1001,
+        501
+      ],
+      "4": [
+        2001,
+        501
+      ],
+      "8": [
+        2001,
+        1001
+      ],
+      "16": [
+        4001,
+        1001
+      ]
+    },
+    "tmax": 40.0,
+    "spatial_threads": 8,
+    "updated": "2026-06-07T18:54:55.967281+00:00"
+  }
+}

@@ -1,0 +1,9 @@
+=== python_t16 (thread) ===
+Host: sh04-08n23.int
+Grid: 1001 x 251, nt=4001, threads=16
+Python: /home/users/jygong/miniconda3/envs/fdfk/bin/python
+Output: /oak/stanford/groups/sklemp/jygong/GP245/FDFK_Python/examples/2_Scaling_Comparison/sherlock/results/python_t16.json
+Started: 2026-06-07T12:15:31-0700
+154.61640603793785
+Finished: 2026-06-07T12:18:14-0700
+Wrote /oak/stanford/groups/sklemp/jygong/GP245/FDFK_Python/examples/2_Scaling_Comparison/sherlock/results/python_t16.json
