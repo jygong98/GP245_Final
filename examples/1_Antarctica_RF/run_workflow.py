@@ -17,7 +17,7 @@ if __name__ == "__main__":
     cfg = ExampleConfig(
         case_name="AT_crust_ice",
         title_label="AT_crust_ice",
-        vs_depth_max_km=50.0,
+        vs_depth_max_km=12.0,
         force_regen=False,
         force_snapshot_regen=False,
     )

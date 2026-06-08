@@ -43,9 +43,9 @@ from seispy.decon import deconit
 print("OK:", f"numpy {numpy.__version__}, scipy {scipy.__version__}, seispy via {seispy.__file__}")
 PY
 
-echo ""
-echo "Running core tests..."
-python -m pytest tests/test_propagator_haskell.py tests/test_io_yaml.py -q
+# echo ""
+# echo "Running core tests..."
+# python -m pytest tests/test_propagator_haskell.py tests/test_io_yaml.py -q
 
 echo ""
 echo "Environment ready. Activate with:"

@@ -26,7 +26,7 @@ import numpy as np
 
 EXAMPLE_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = EXAMPLE_DIR.parents[1]
-INPUT_DIR = PROJECT_ROOT / "benchmark" / "test1" / "input"
+INPUT_DIR = PROJECT_ROOT / "benchmark" / "test1_P_out" / "input"
 CACHE_PATH = EXAMPLE_DIR / "python_scaling_times.json"
 
 # Match Fortran scaling grids (nx, nz) from FDFK_Scaling_Fortran logs.
