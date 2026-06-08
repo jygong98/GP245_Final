@@ -19,7 +19,7 @@ if __name__ == "__main__":
         title_label="test1 P (crust + mantle)",
         vs_depth_max_km=50.0,
         bwf_pad_factor=2.0,  # anti-wraparound: synthesise on ~2x time axis
-        force_regen=False,
-        force_snapshot_regen=False,
+        force_regen=True,
+        force_snapshot_regen=True,
     )
     run_example_workflow(EXAMPLE_DIR, cfg)
